@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sals CarCheck</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial; padding: 15px; background:#111; color:white; }
+    input, textarea, select, button {
+      width:100%; margin:8px 0; padding:10px;
+      border-radius:8px; border:none;
+    }
+    button { background:#4CAF50; color:white; font-weight:bold; }
+  </style>
+</head>
+<body>
+
+<h2>Sals CarCheck</h2>
+
+<input id="client" placeholder="Client Name">
+<input id="vehicle" placeholder="Vehicle">
+<input id="location" placeholder="Location">
+
+<textarea id="notes" placeholder="Inspection Notes"></textarea>
+<input id="obd" placeholder="OBD Codes">
+
+<select id="score">
+  <option value="0">Good</option>
+  <option value="5">Minor Issues</option>
+  <option value="10">Major Issues</option>
+</select>
+
+<button onclick="submitData()">Submit</button>
+
+<script>
+const SCRIPT_URL = https://script.google.com/macros/s/AKfycbxT20IU0awkV23-9hRJBoEcXXQDe8D1FLkXSPSn618M_jNQcDEU9BVlO8tOwoSpnGUJ/exec;
+
+function submitData() {
+  const data = {
+    client: document.getElementById("client").value,
+    vehicle: document.getElementById("vehicle").value,
+    location: document.getElementById("location").value,
+    notes: document.getElementById("notes").value,
+    obd: document.getElementById("obd").value,
+    score: document.getElementById("score").value,
+    verdict: getVerdict(document.getElementById("score").value),
+    photos: ""
+  };
+
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(() => alert("Saved!"));
+}
+
+function getVerdict(score) {
+  score = parseInt(score);
+  if (score <= 3) return "BUY";
+  if (score <= 8) return "CAUTION";
+  return "AVOID";
+}
+</script>
+
+</body>
+</html>
